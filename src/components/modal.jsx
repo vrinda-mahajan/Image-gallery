@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import techImg1 from "../assets/images/tech1.svg";
 import closeSq from "../assets/icons/closesquare.svg";
 
-function Modal({ setShowModal }) {
+function Modal({ setShowModal, imgDetail }) {
+  const { id, img, tags } = imgDetail;
   const modalRef = useRef();
   useEffect(() => {
     let closeList = (e) => {
@@ -24,8 +24,14 @@ function Modal({ setShowModal }) {
           <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
             {/*header*/}
             <div className="flex items-start justify-between py-2 px-6 bg-[#F5F5F5] rounded-t-xl">
-              <h3 className="text-[20px] font-medium">Preview ID: 48777</h3>
-              <button className="ml-auto" onClick={() => setShowModal(false)}>
+              <h3 className="text-[20px] font-medium">Preview ID: {id}</h3>
+              <button
+                className="ml-auto"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowModal(false);
+                }}
+              >
                 <img alt="close square" src={closeSq} />
               </button>
             </div>
@@ -34,7 +40,7 @@ function Modal({ setShowModal }) {
               <img
                 className="w-2/3 rounded object-cover"
                 alt="tech img"
-                src={techImg1}
+                src={img}
               />
               <div className="w-1/3 text-[#3B4043] mx-8">
                 <h2 className="text[21px] tracking-wide">Download</h2>
@@ -105,13 +111,9 @@ function Modal({ setShowModal }) {
             {/*footer*/}
             <div className="flex gap-1 items-center pb-6 px-6 rounded-b-lg">
               <span className="font-semibold text-[#3B4043]">Tags: </span>
-              {[
-                "Weltraumbilder & bilder",
-                "Erde bilder & bilder",
-                "Naturbilder",
-              ].map((tag) => {
+              {tags.map((tag,index) => {
                 return (
-                  <div className="text-[#767676] rounded-sm text-[11px] px-[7px] py-1 inline-block bg-[#F5F5F5]">
+                  <div key={index} className="text-[#767676] rounded-sm text-[11px] px-[7px] py-1 inline-block bg-[#F5F5F5]">
                     {tag}
                   </div>
                 );
