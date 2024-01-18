@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function Searchbar() {
   const [input, setInput] = useState();
   return (
-    <form className="w-4/5 absolute top-[310px] max-md:top-64 max-sm:top-36 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <form className="text-white ">
       <div className="relative">
         <input
           className="outline-none block w-full p-4 max-sm:p-2 ps-16 border-2 border-[rgb(182,182,182,0.5)] backdrop-blur-lg bg-[rgb(182,182,182,0.2)] shadow-inset rounded-lg px-10 max-sm:px-6"
