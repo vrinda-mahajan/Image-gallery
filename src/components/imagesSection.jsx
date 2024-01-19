@@ -5,6 +5,7 @@ import ImgCard from "./imgCard";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { useImages } from "../contexts/imageContext";
 import { useParams } from "react-router-dom";
+import { ColorRing } from "react-loader-spinner";
 
 const categories = [
   "Digital",
@@ -18,7 +19,7 @@ const categories = [
 ];
 
 function ImagesSection() {
-  const { imagesData, setCategory } = useImages();
+  const { imagesData, setCategory, loading } = useImages();
   const { category } = useParams();
   setCategory(category);
   return (
@@ -44,27 +45,42 @@ function ImagesSection() {
           );
         })}
       </div>
+      {console.log(loading)}
       <div className="p-9">
-        {imagesData.length > 0 ? (
-          <ResponsiveMasonry
-            columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
-          >
-            <Masonry columnsCount={3} gutter="56px">
-              {imagesData.map((imgData) => {
-                return (
-                  <ImgCard
-                    key={imgData.id}
-                    imgDetail={imgData}
-                    category={category}
-                  />
-                );
-              })}
-            </Masonry>
-          </ResponsiveMasonry>
-        ) : (
-          <div className="text-center text-[20px] font-semibold">
-            No Results found for your Search!
+        {loading ? (
+          <div className="w-full flex justify-center">
+            <ColorRing
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="color-ring-loading"
+              color="#4fa94d"
+            />
           </div>
+        ) : (
+          <>
+            {imagesData.length > 0 ? (
+              <ResponsiveMasonry
+                columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
+              >
+                <Masonry columnsCount={3} gutter="56px">
+                  {imagesData.map((imgData) => {
+                    return (
+                      <ImgCard
+                        key={imgData.id}
+                        imgDetail={imgData}
+                        category={category}
+                      />
+                    );
+                  })}
+                </Masonry>
+              </ResponsiveMasonry>
+            ) : (
+              <div className="text-center text-[20px] font-semibold">
+                No Results found for your Search!
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

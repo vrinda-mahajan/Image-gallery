@@ -6,8 +6,9 @@ export const ImageContext = createContext();
 const ImageProvider = ({ children }) => {
   const [imagesData, setImagesData] = useState([]);
   const [category, setCategory] = useState("");
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    setLoading(true);
     const getImages = async () => {
       try {
         const {
@@ -16,6 +17,7 @@ const ImageProvider = ({ children }) => {
           `https://pixabay.com/api/?key=${process.env.REACT_APP_PIXABAY_API_KEY}&q=${category}&image_type=all&per_page=20`
         );
         setImagesData(hits);
+        setLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -25,7 +27,7 @@ const ImageProvider = ({ children }) => {
 
   return (
     <ImageContext.Provider
-      value={{ imagesData, setImagesData, category, setCategory }}
+      value={{ imagesData, setImagesData, category, setCategory, loading }}
     >
       {children}
     </ImageContext.Provider>
