@@ -3,7 +3,7 @@ import { RiSearch2Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
 function Searchbar() {
-  const [input, setInput] = useState();
+  const [input, setInput] = useState("");
   return (
     <form className="text-white ">
       <div className="relative">
@@ -17,7 +17,8 @@ function Searchbar() {
           <RiSearch2Line style={{ color: "white" }} className="size-5" />
         </div>
         <Link
-          to={input && `${input}`}
+          to={input && `/${input}`}
+          onClick={()=>setInput("")}
           type="submit"
           className="absolute end-2.5 bottom-3.5 max-sm:bottom-2 border-2 border-white rounded-lg py-[2px] max-sm:py-0 px-[14px] bg-transparent"
         >

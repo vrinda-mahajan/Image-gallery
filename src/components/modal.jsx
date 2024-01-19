@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import closeSq from "../assets/icons/closesquare.svg";
 
 function Modal({ setShowModal, imgDetail }) {
-  const { id, img, tags } = imgDetail;
+  const { id, largeImageURL, tags } = imgDetail;
   const modalRef = useRef();
   useEffect(() => {
     let closeList = (e) => {
@@ -38,9 +38,9 @@ function Modal({ setShowModal, imgDetail }) {
             {/*body*/}
             <div className="relative p-6 flex">
               <img
-                className="w-2/3 rounded object-cover"
+                className="min-w-[500px] rounded object-cover h-[350px] overflow-hidden "
                 alt="tech img"
-                src={img}
+                src={largeImageURL}
               />
               <div className="w-1/3 text-[#3B4043] mx-8">
                 <h2 className="text[21px] tracking-wide">Download</h2>
@@ -111,9 +111,12 @@ function Modal({ setShowModal, imgDetail }) {
             {/*footer*/}
             <div className="flex gap-1 items-center pb-6 px-6 rounded-b-lg">
               <span className="font-semibold text-[#3B4043]">Tags: </span>
-              {tags.map((tag,index) => {
+              {tags.split(",").map((tag, index) => {
                 return (
-                  <div key={index} className="text-[#767676] rounded-sm text-[11px] px-[7px] py-1 inline-block bg-[#F5F5F5]">
+                  <div
+                    key={index}
+                    className="text-[#767676] rounded-sm text-[11px] px-[7px] py-1 inline-block bg-[#F5F5F5]"
+                  >
                     {tag}
                   </div>
                 );

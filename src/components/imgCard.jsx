@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "./modal";
 
 function ImgCard({ imgDetail }) {
-  const { img, tags } = imgDetail;
+  const { largeImageURL, tags } = imgDetail;
   const [showModal, setShowModal] = React.useState(false);
   return (
     <>
@@ -10,9 +10,9 @@ function ImgCard({ imgDetail }) {
         onClick={() => setShowModal(true)}
         className="cursor-pointer w-[360px]"
       >
-        <img alt="img" src={img} className="w-[360px]" />
+        <img alt="img" src={largeImageURL} className="w-[360px]" />
         <div className="flex gap-1 mt-[11px]">
-          {tags.map((tag, index) => {
+          {tags.split(",").map((tag, index) => {
             return (
               <div
                 key={index}

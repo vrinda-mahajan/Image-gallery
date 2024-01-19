@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import img from "../assets/images/landing.svg";
-import techImg1 from "../assets/images/tech1.svg";
-import techImg2 from "../assets/images/tech2.svg";
-import techImg3 from "../assets/images/tech3.svg";
 import Searchbar from "./searchbar";
 import ImgCard from "./imgCard";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const categories = [
   "Digital",
@@ -17,39 +16,26 @@ const categories = [
   "Finanzieren",
   "Marketing",
 ];
-const imgDetails = [
-  {
-    id: 48777,
-    img: techImg1,
-    tags: ["Weltraumbilder & bilder", "Erde bilder & bilder", "Naturbilder"],
-  },
-  {
-    id: 48778,
-    img: techImg2,
-    tags: ["Weltraumbilder & bilder", "Erde bilder & bilder", "Naturbilder"],
-  },
-  {
-    id: 48779,
-    img: techImg3,
-    tags: ["Weltraumbilder & bilder", "Erde bilder & bilder", "Naturbilder"],
-  },
-  {
-    id: 48780,
-    img: techImg1,
-    tags: ["Weltraumbilder & bilder", "Erde bilder & bilder", "Naturbilder"],
-  },
-  {
-    id: 48781,
-    img: techImg2,
-    tags: ["Weltraumbilder & bilder", "Erde bilder & bilder", "Naturbilder"],
-  },
-  {
-    id: 48782,
-    img: techImg3,
-    tags: ["Weltraumbilder & bilder", "Erde bilder & bilder", "Naturbilder"],
-  },
-];
+
 function ImagesSection() {
+  const [imagesData, setImagesData] = useState([]);
+  const { category } = useParams();
+  console.log(category);
+  useEffect(() => {
+    const getImages = async () => {
+      try {
+        const {
+          data: { hits },
+        } = await axios.get(
+          `https://pixabay.com/api/?key=${process.env.REACT_APP_PIXABAY_API_KEY}&q=${category}&image_type=all&per_page=20`
+        );
+        setImagesData(hits);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getImages();
+  }, [category]);
   return (
     <div>
       <div className="relative h-[340px] overflow-hidden">
@@ -73,17 +59,22 @@ function ImagesSection() {
           );
         })}
       </div>
-      <div className=" p-9">
-        <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
-          <Masonry columnsCount={3} gutter="56px">
-            {imgDetails.map((imgDetail) => {
-              return <ImgCard key={imgDetail.id} imgDetail={imgDetail} />;
-            })}
-          </Masonry>
-        </ResponsiveMasonry>
-        {/* {imgDetails.map((imgDetail) => {
-              return <ImgCard key={imgDetail.id} imgDetail={imgDetail} />;
-            })} */}
+      <div className="p-9">
+        {imagesData.length > 0 ? (
+          <ResponsiveMasonry
+            columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
+          >
+            <Masonry columnsCount={3} gutter="56px">
+              {imagesData.map((imgData) => {
+                return <ImgCard key={imgData.id} imgDetail={imgData} />;
+              })}
+            </Masonry>
+          </ResponsiveMasonry>
+        ) : (
+          <div className="text-center text-[20px] font-semibold">
+            No Results found for your Search!
+          </div>
+        )}
       </div>
     </div>
   );
