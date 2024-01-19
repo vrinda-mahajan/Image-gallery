@@ -1,11 +1,25 @@
-import React from "react";
-import img from "../assets/images/landing.svg";
+import React, { useEffect, useState } from "react";
+import landingImg1 from "../assets/images/landing.svg";
+import landingImg2 from "../assets/images/landing2.svg";
 import Searchbar from "./searchbar";
 
 function LandingSection() {
+  const [backgroundImage, setBackgroundImage] = useState('');
+  const images = [landingImg1,landingImg2];
+  useEffect(() => {
+    setRandomBackground();
+    const intervalId = setInterval(() => {
+      setRandomBackground();
+    }, 5000);
+    return () => clearInterval(intervalId);
+  }, []);
+  const setRandomBackground = () => {
+    const randomIndex = Math.floor(Math.random() * images.length);
+    setBackgroundImage(images[randomIndex]);
+  };
   return (
     <div className="relative flex justify-center">
-      <img src={img} alt="Landing img" className="h-auto w-full max-w-full" />
+      <img src={backgroundImage} alt="Landing img" className="h-auto w-full max-w-full" />
       <div className="text-white absolute top-40 max-md:top-32 w-2/3 text-center">
         <h1 className="font-bold text-[70px] max-md:text-[46px] max-sm:text-[22px]">
           Discover over 2,000,000 free Stock Images.

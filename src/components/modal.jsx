@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import closeSq from "../assets/icons/closesquare.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 function Modal() {
   const params = useParams();
@@ -36,6 +37,13 @@ function Modal() {
     document.addEventListener("mousedown", closeList);
     return () => document.removeEventListener("mousedown", closeList);
   });
+  const url = window.location.href;
+  const shareClickHandler = () => {
+    navigator.clipboard.writeText(url)
+    toast.success('Copied to clipBoard!',{
+      duration: 2000,
+      position: 'top-right'})
+  }
   return (
     <div className="absolute top-0">
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none ">
@@ -65,7 +73,16 @@ function Modal() {
                 src={largeImageURL}
               />
               <div className="w-1/3 text-[#3B4043] mx-8">
-                <h2 className="text[21px] tracking-wide">Download</h2>
+                <div className="flex justify-between items-center">
+                  <h2 className="text[21px] tracking-wide">Download</h2>
+                  <button
+                  title="copy link"
+                    onClick={shareClickHandler}
+                    className="border-[1px] border-[#3B4043] rounded py-[2px] px-[14px] bg-transparent my-3"
+                  >
+                    Share
+                  </button>
+                </div>
                 <div className="border-[1px] w-[275px] rounded-lg mt-3">
                   <label
                     htmlFor="small"
