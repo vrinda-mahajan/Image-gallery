@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import img from "../assets/images/landing.svg";
 import Searchbar from "./searchbar";
 import ImgCard from "./imgCard";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import axios from "axios";
+import { useImages } from "../contexts/imageContext";
 import { useParams } from "react-router-dom";
 
 const categories = [
@@ -18,24 +18,9 @@ const categories = [
 ];
 
 function ImagesSection() {
-  const [imagesData, setImagesData] = useState([]);
+  const { imagesData, setCategory } = useImages();
   const { category } = useParams();
-  console.log(category);
-  useEffect(() => {
-    const getImages = async () => {
-      try {
-        const {
-          data: { hits },
-        } = await axios.get(
-          `https://pixabay.com/api/?key=${process.env.REACT_APP_PIXABAY_API_KEY}&q=${category}&image_type=all&per_page=20`
-        );
-        setImagesData(hits);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getImages();
-  }, [category]);
+  setCategory(category);
   return (
     <div>
       <div className="relative h-[340px] overflow-hidden">
@@ -44,7 +29,7 @@ function ImagesSection() {
           <Searchbar />
         </div>
         <p className="absolute top-[250px] left-1/2 -translate-x-1/2 text-white text-[40px] font-bold">
-          Results: <span className="capitalize">technology</span>
+          Results: <span className="capitalize">{category}</span>
         </p>
       </div>
       <div className="bg-[#F5F5F5] flex gap-2 p-7 ">
@@ -66,7 +51,13 @@ function ImagesSection() {
           >
             <Masonry columnsCount={3} gutter="56px">
               {imagesData.map((imgData) => {
-                return <ImgCard key={imgData.id} imgDetail={imgData} />;
+                return (
+                  <ImgCard
+                    key={imgData.id}
+                    imgDetail={imgData}
+                    category={category}
+                  />
+                );
               })}
             </Masonry>
           </ResponsiveMasonry>

@@ -1,20 +1,43 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import closeSq from "../assets/icons/closesquare.svg";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
-function Modal({ setShowModal, imgDetail }) {
-  const { id, largeImageURL, tags } = imgDetail;
+function Modal() {
+  const params = useParams();
+  const [imageDetail, setImageDetail] = useState({});
+  let navigate = useNavigate();
+  useEffect(() => {
+    const getImage = async () => {
+      console.log("inside useeffect");
+      try {
+        const {
+          data: { hits },
+        } = await axios.get(
+          `https://pixabay.com/api/?key=${process.env.REACT_APP_PIXABAY_API_KEY}&q=${params.category}&id=${params.id}&image_type=photo&pretty=true`
+        );
+        console.log(hits[0]);
+        setImageDetail(hits[0]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getImage();
+  }, [params]);
+  const { id, largeImageURL, tags } = imageDetail;
+
   const modalRef = useRef();
   useEffect(() => {
     let closeList = (e) => {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
-        setShowModal(false);
+        navigate(-1);
       }
     };
     document.addEventListener("mousedown", closeList);
     return () => document.removeEventListener("mousedown", closeList);
   });
   return (
-    <>
+    <div className="absolute top-0">
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none ">
         <div
           ref={modalRef}
@@ -27,9 +50,8 @@ function Modal({ setShowModal, imgDetail }) {
               <h3 className="text-[20px] font-medium">Preview ID: {id}</h3>
               <button
                 className="ml-auto"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowModal(false);
+                onClick={() => {
+                  navigate(-1);
                 }}
               >
                 <img alt="close square" src={closeSq} />
@@ -111,22 +133,23 @@ function Modal({ setShowModal, imgDetail }) {
             {/*footer*/}
             <div className="flex gap-1 items-center pb-6 px-6 rounded-b-lg">
               <span className="font-semibold text-[#3B4043]">Tags: </span>
-              {tags.split(",").map((tag, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="text-[#767676] rounded-sm text-[11px] px-[7px] py-1 inline-block bg-[#F5F5F5]"
-                  >
-                    {tag}
-                  </div>
-                );
-              })}
+              {tags &&
+                tags.split(",").map((tag, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="text-[#767676] rounded-sm text-[11px] px-[7px] py-1 inline-block bg-[#F5F5F5]"
+                    >
+                      {tag}
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>
       </div>
       <div className="opacity-50 fixed inset-0 z-40 bg-black"></div>
-    </>
+    </div>
   );
 }
 

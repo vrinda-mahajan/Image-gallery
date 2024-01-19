@@ -1,15 +1,12 @@
 import React from "react";
-import Modal from "./modal";
+import { Link } from "react-router-dom";
 
-function ImgCard({ imgDetail }) {
-  const { largeImageURL, tags } = imgDetail;
-  const [showModal, setShowModal] = React.useState(false);
+function ImgCard({ imgDetail, category }) {
+  const { id, largeImageURL, tags } = imgDetail;
+
   return (
     <>
-      <div
-        onClick={() => setShowModal(true)}
-        className="cursor-pointer w-[360px]"
-      >
+      <Link to={`/${category}/${id}`} className="cursor-pointer w-[360px]">
         <img alt="img" src={largeImageURL} className="w-[360px]" />
         <div className="flex gap-1 mt-[11px]">
           {tags.split(",").map((tag, index) => {
@@ -23,10 +20,7 @@ function ImgCard({ imgDetail }) {
             );
           })}
         </div>
-        {showModal ? (
-          <Modal setShowModal={setShowModal} imgDetail={imgDetail} />
-        ) : null}
-      </div>
+      </Link>
     </>
   );
 }
