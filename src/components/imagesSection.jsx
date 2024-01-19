@@ -45,7 +45,6 @@ function ImagesSection() {
           );
         })}
       </div>
-      {console.log(loading)}
       <div className="p-9">
         {loading ? (
           <div className="w-full flex justify-center">

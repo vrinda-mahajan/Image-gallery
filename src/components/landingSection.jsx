@@ -12,7 +12,7 @@ function LandingSection() {
       setRandomBackground();
     }, 5000);
     return () => clearInterval(intervalId);
-  }, []);
+  });
   const setRandomBackground = () => {
     const randomIndex = Math.floor(Math.random() * images.length);
     setBackgroundImage(images[randomIndex]);
