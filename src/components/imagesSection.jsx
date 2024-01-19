@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import img from "../assets/images/landing.svg";
 import Searchbar from "./searchbar";
 import ImgCard from "./imgCard";
@@ -21,7 +21,9 @@ const categories = [
 function ImagesSection() {
   const { imagesData, setCategory, loading } = useImages();
   const { category } = useParams();
-  setCategory(category);
+  useEffect(() => {
+    setCategory(category);
+  }, [category,setCategory]);
   return (
     <div>
       <div className="relative h-[340px] overflow-hidden">
