@@ -1,19 +1,10 @@
-import { Route, Routes, useLocation } from "react-router-dom";
-import Home from "./pages/home";
-import ImageSearch from "./pages/imageSearch";
-import Navbar from "./components/navbar";
-import Modal from "./components/modal";
-import { Toaster } from "react-hot-toast";
-import Signin from "./pages/signin";
-import PublicRoutes from "./routes/publicRoutes";
-import Signup from "./pages/signup";
-import History from "./pages/history";
-import PrivateRoutes from "./routes/privateRoutes";
 import { useEffect } from "react";
-import { useHistory } from "./hooks/useHistory";
-import { useLike } from "./hooks/useLike";
-import Liked from "./pages/liked";
-import { useAuth } from "./hooks/useAuth";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { useAuth, useHistory, useLike } from "./hooks";
+import { PrivateRoutes, PublicRoutes } from "./routes";
+import { Modal, Navbar } from "./components";
+import { History, Home, ImageSearch, Liked, Signin, Signup } from "./pages";
 
 function App() {
   const location = useLocation();

@@ -2,8 +2,8 @@ import { createContext, useReducer } from "react";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../firebase/config";
-import { useAuth } from "../hooks/useAuth";
 import { appReducer, initialReducerValue } from "../reducer/appReducer";
+import { useAuth } from "../hooks";
 
 const HistoryContext = createContext();
 

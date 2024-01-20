@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { ColorRing } from "react-loader-spinner";
-import ImgCard from "../components/imgCard";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { useHistory } from "../hooks/useHistory";
+import { useHistory } from "../hooks";
+import { ImgCard } from "../components";
 
 function History() {
   const {

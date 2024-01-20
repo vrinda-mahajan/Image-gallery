@@ -2,8 +2,8 @@ import React from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { Link } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
 import { GoHeartFill } from "react-icons/go";
+import { useAuth } from "../hooks";
 
 function Navbar() {
   const { user } = useAuth();
@@ -48,7 +48,7 @@ function Navbar() {
           <Link
             to={"/liked"}
             style={{ color: "white" }}
-            className="border-2 border-white rounded-lg rounded-lg py-[2px] px-1 bg-transparent"
+            className="border-2 border-white rounded-lg py-[2px] px-1 bg-transparent"
           >
             <GoHeartFill />
           </Link>

@@ -1,10 +1,8 @@
-import { useHistory } from "../hooks/useHistory";
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-import { useState } from "react";
 import { db } from "../firebase/config";
-import { useAuth } from "../hooks/useAuth";
 import toast from "react-hot-toast";
+import { useAuth, useHistory } from "../hooks";
 
 const LikeContext = createContext();
 const LikeProvider = ({ children }) => {

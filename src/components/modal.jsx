@@ -2,15 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import closeSq from "../assets/icons/closesquare.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { ColorRing } from "react-loader-spinner";
-import shareClickHandler from "../utils/shareImg";
-import downloadClickHandler from "../utils/downloadImg";
-import { useAuth } from "../hooks/useAuth";
 import toast from "react-hot-toast";
-import { useHistory } from "../hooks/useHistory";
-import likeClickHandler from "../utils/like";
-import { useLike } from "../hooks/useLike";
+import { ColorRing } from "react-loader-spinner";
 import { GoHeart, GoHeartFill } from "react-icons/go";
+import {
+  downloadClickHandler,
+  likeClickHandler,
+  shareClickHandler,
+} from "../utils";
+import { useAuth, useHistory, useLike } from "../hooks";
 
 function Modal() {
   const params = useParams();

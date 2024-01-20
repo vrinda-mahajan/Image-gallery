@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import img from "../assets/images/landing.svg";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { Link, useParams } from "react-router-dom";
+import { ColorRing } from "react-loader-spinner";
+import { useImages } from "../contexts/imageContext";
 import Searchbar from "./searchbar";
 import ImgCard from "./imgCard";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { useImages } from "../contexts/imageContext";
-import { useParams } from "react-router-dom";
-import { ColorRing } from "react-loader-spinner";
-import { Link } from "react-router-dom";
 
 const categories = [
   "Digital",

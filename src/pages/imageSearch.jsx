@@ -1,5 +1,5 @@
 import React from "react";
-import ImagesSection from "../components/imagesSection";
+import { ImagesSection } from "../components";
 
 function ImageSearch() {
   return (
