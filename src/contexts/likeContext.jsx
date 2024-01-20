@@ -1,19 +1,18 @@
-import { createContext, useReducer } from "react";
+import { useHistory } from "../hooks/useHistory";
+import { createContext } from "react";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../firebase/config";
 import { useAuth } from "../hooks/useAuth";
-import { appReducer, initialReducerValue } from "../reducer/appReducer";
+import toast from "react-hot-toast";
 
-const HistoryContext = createContext();
-
-const HistoryProvider = ({ children }) => {
+const LikeContext = createContext();
+const LikeProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const { user } = useAuth();
-  const [state, dispatch] = useReducer(appReducer, initialReducerValue);
-
-  const getHistory = async () => {
+  const { dispatch } = useHistory();
+  const getLiked = async () => {
     let docId;
     const q = query(
       collection(db, `userInfo`),
@@ -23,18 +22,18 @@ const HistoryProvider = ({ children }) => {
     querySnapshot.forEach(async (doc) => {
       docId = doc.id;
     });
-    const historySnapshot = await getDocs(
-      collection(db, `userInfo/${docId}/history`)
+    const likedSnapshot = await getDocs(
+      collection(db, `userInfo/${docId}/liked`)
     );
     let images = [];
-    historySnapshot.forEach((doc) => {
+    likedSnapshot.forEach((doc) => {
       images.push(doc.data());
     });
-    dispatch({ type: "SET_HISTORY", payload: images });
+    dispatch({ type: "SET_LIKED", payload: images });
     setLoading(false);
   };
 
-  const addToHistory = async (category, imageDetail) => {
+  const addToLiked = async (category, imageDetail) => {
     const { id, largeImageURL, tags } = imageDetail;
     const q = query(
       collection(db, `userInfo`),
@@ -42,20 +41,19 @@ const HistoryProvider = ({ children }) => {
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach(async (doc) => {
-      await addDoc(collection(db, `userInfo/${doc.id}/history`), {
+      await addDoc(collection(db, `userInfo/${doc.id}/liked`), {
         id,
         largeImageURL,
         tags,
         category,
       });
     });
-    getHistory();
+    toast.success("Liked!");
+    getLiked();
   };
 
-  const value = { state, dispatch, loading, getHistory, addToHistory };
-  return (
-    <HistoryContext.Provider value={value}>{children}</HistoryContext.Provider>
-  );
+  const value = { loading, getLiked, addToLiked };
+  return <LikeContext.Provider value={value}>{children}</LikeContext.Provider>;
 };
 
-export { HistoryContext, HistoryProvider };
+export { LikeContext, LikeProvider };

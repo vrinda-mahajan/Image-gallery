@@ -8,6 +8,9 @@ import downloadClickHandler from "../utils/downloadImg";
 import { useAuth } from "../hooks/useAuth";
 import toast from "react-hot-toast";
 import { useHistory } from "../hooks/useHistory";
+import likeClickHandler from "../utils/like";
+import { useLike } from "../hooks/useLike";
+import { GoHeart, GoHeartFill } from "react-icons/go";
 
 function Modal() {
   const params = useParams();
@@ -16,8 +19,10 @@ function Modal() {
   const [disableDownload, setDisableDownload] = useState(false);
   const { user } = useAuth();
   const {
-    state: { history },
+    state: { history, liked },
+    addToHistory,
   } = useHistory();
+  const { addToLiked } = useLike();
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -65,6 +70,7 @@ function Modal() {
     { name: "Big", width: 2400, height: 3660 },
     { name: "Original", width: imageWidth, height: imageHeight },
   ];
+
   return (
     <div className="absolute top-0">
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none ">
@@ -107,17 +113,43 @@ function Modal() {
                 <div className="w-1/3 max-md:w-full text-[#3B4043] mx-8 max-md:mx-1">
                   <div className="flex justify-between items-center">
                     <h2 className="text[21px] tracking-wide">Download</h2>
-                    <button
-                      title="copy link"
-                      onClick={shareClickHandler}
-                      className="border-[1px] border-[#3B4043] rounded py-[2px] px-[14px] bg-transparent my-3"
-                    >
-                      Share
-                    </button>
+                    <div className="flex gap-1">
+                      {liked.find((img) => img.id === id) ? (
+                        <button
+                          title="like"
+                          className="border-[1px] border-[#3B4043] rounded py-[2px] px-1 bg-transparent my-3"
+                        >
+                          <GoHeartFill />
+                        </button>
+                      ) : (
+                        <button
+                          title="like"
+                          onClick={() =>
+                            likeClickHandler(
+                              params.category,
+                              addToLiked,
+                              liked,
+                              imageDetail
+                            )
+                          }
+                          className="border-[1px] border-[#3B4043] rounded py-[2px] px-1 bg-transparent my-3"
+                        >
+                          <GoHeart />
+                        </button>
+                      )}
+                      <button
+                        title="copy link"
+                        onClick={shareClickHandler}
+                        className="border-[1px] border-[#3B4043] rounded py-[2px] px-[14px] bg-transparent my-3"
+                      >
+                        Share
+                      </button>
+                    </div>
                   </div>
                   <div className="border-[1px] w-[275px] max-md:w-full rounded-lg mt-3">
-                    {downloadSizes.map((size) => (
+                    {downloadSizes.map((size, index) => (
                       <label
+                        key={index}
                         htmlFor={size.name}
                         className="py-2 px-[14px] border-b-[1px] flex justify-between"
                       >
@@ -140,8 +172,9 @@ function Modal() {
                         downloadClickHandler(
                           previewURL,
                           setDisableDownload,
-                          user,
+                          addToHistory,
                           history,
+                          params.category,
                           imageDetail
                         )
                       }

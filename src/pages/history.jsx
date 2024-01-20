@@ -8,11 +8,11 @@ function History() {
   const {
     state: { history },
     loading,
-    getHistoryDocs,
+    getHistory,
   } = useHistory();
   useEffect(() => {
-    getHistoryDocs();
-  }, [getHistoryDocs]);
+    getHistory();
+  }, [getHistory]);
   return (
     <div className="pt-28 bg-[#d6d6d6] px-8">
       {loading ? (
@@ -43,7 +43,7 @@ function History() {
               </ResponsiveMasonry>
             </div>
           ) : (
-            <div className="text-center text-[20px] font-semibold">
+            <div className="text-center text-[20px] font-semibold h-screen">
               Nothing in history yet!
             </div>
           )}
