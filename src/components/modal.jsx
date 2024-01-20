@@ -18,7 +18,7 @@ function Modal() {
     historyData: { response },
   } = useFirestore();
   let navigate = useNavigate();
-  
+
   useEffect(() => {
     const getImage = async () => {
       setLoading(true);
@@ -37,7 +37,7 @@ function Modal() {
     getImage();
   }, [params]);
 
-  const { id, largeImageURL, tags, previewURL, imageWidth, imageHeight } =
+  const { id, largeImageURL, tags, previewURL, imageWidth, imageHeight,views,downloads,likes } =
     imageDetail;
   console.log(imageDetail);
   const modalRef = useRef();
@@ -50,7 +50,12 @@ function Modal() {
     document.addEventListener("mousedown", closeList);
     return () => document.removeEventListener("mousedown", closeList);
   });
-
+  const downloadSizes = [
+    { name: "Small", width: 640, height: 960 },
+    { name: "Medium", width: 1920, height: 2660 },
+    { name: "Big", width: 2400, height: 3660 },
+    { name: "Original", width: imageWidth, height: imageHeight },
+  ];
   return (
     <div className="absolute top-0">
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none ">
@@ -102,46 +107,18 @@ function Modal() {
                     </button>
                   </div>
                   <div className="border-[1px] w-[275px] rounded-lg mt-3">
-                    <label
-                      htmlFor="small"
-                      className="py-2 px-[14px] border-b-[1px] flex justify-between"
-                    >
-                      <p>Small</p>
-                      <div className="flex">
-                        <p className="font-bold">640 X 960</p>
-                        <input id="small" type="radio" className="ml-6" />
-                      </div>
-                    </label>
-                    <label
-                      htmlFor="medium"
-                      className="py-2 px-[14px] border-b-[1px] flex justify-between"
-                    >
-                      <p>Medium</p>
-                      <div className="flex">
-                        <p className="font-bold">1920 X 2660</p>
-                        <input id="medium" type="radio" className="ml-6" />
-                      </div>
-                    </label>
-                    <label
-                      htmlFor="big"
-                      className="py-2 px-[14px] border-b-[1px] flex justify-between"
-                    >
-                      <p>Big</p>
-                      <div className="flex">
-                        <p className="font-bold">2400 X 3660</p>
-                        <input id="big" type="radio" className="ml-6" />
-                      </div>
-                    </label>
-                    <label
-                      htmlFor="big"
-                      className="py-2 px-[14px] border-b-[1px] flex justify-between"
-                    >
-                      <p>Big</p>
-                      <div className="flex">
-                        <p className="font-bold">2400 X 3660</p>
-                        <input id="big" type="radio" className="ml-6" />
-                      </div>
-                    </label>
+                    {downloadSizes.map((size) => (
+                      <label
+                        htmlFor={size.name}
+                        className="py-2 px-[14px] border-b-[1px] flex justify-between"
+                      >
+                        <p>{size.name}</p>
+                        <div className="flex">
+                          <p className="font-bold">{`${size.width} X ${size.height}`}</p>
+                          <input name="downloadSize" id={size.name} type="radio" className="ml-6" />
+                        </div>
+                      </label>
+                    ))}
                   </div>
                   <button
                     onClick={() =>
@@ -163,16 +140,16 @@ function Modal() {
                   </h2>
                   <div className="mt-3 flex flex-wrap justify-between w-[280px]">
                     <div className="font-semibold">
-                      <span className="text-[11px] text-[#717579]">User</span>
-                      <p>Josch13</p>
+                      <span className="text-[11px] text-[#717579]">Views</span>
+                      <p>{views}</p>
                     </div>
                     <div className="font-semibold">
-                      <span className="text-[11px] text-[#717579]">User</span>
-                      <p>Josch13</p>
+                      <span className="text-[11px] text-[#717579]">Downloads</span>
+                      <p>{downloads}</p>
                     </div>
                     <div className="font-semibold">
-                      <span className="text-[11px] text-[#717579]">User</span>
-                      <p>Josch13</p>
+                      <span className="text-[11px] text-[#717579]">Likes</span>
+                      <p>{likes}</p>
                     </div>
                   </div>
                 </div>
