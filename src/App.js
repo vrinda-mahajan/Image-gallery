@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     user && getHistory();
     user && getLiked();
-  }, [user]);
+  }, []);
   return (
     <>
       {!["/signin", "/signup"].includes(location.pathname) && <Navbar />}

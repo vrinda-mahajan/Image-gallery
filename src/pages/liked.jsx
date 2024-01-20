@@ -12,7 +12,7 @@ function Liked() {
 
   useEffect(() => {
     getLiked();
-  }, [getLiked]);
+  }, []);
   return (
     <div className="pt-28 bg-[#d6d6d6] px-8">
       {loading ? (
