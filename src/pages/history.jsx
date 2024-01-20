@@ -9,7 +9,7 @@ function History() {
     historyData: { response, loading },
   } = useFirestore();
   return (
-    <div className="pt-28 bg-[#d6d6d6] h-screen">
+    <div className="pt-28 bg-[#d6d6d6] px-8">
       {loading ? (
         <div className="w-full flex justify-center items-center h-screen">
           <ColorRing

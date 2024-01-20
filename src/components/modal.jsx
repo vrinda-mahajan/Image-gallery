@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import closeSq from "../assets/icons/closesquare.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import toast from "react-hot-toast";
 import { ColorRing } from "react-loader-spinner";
-import { db } from "../firebase/config";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import shareClickHandler from "../utils/shareImg";
+import downloadClickHandler from "../utils/downloadImg";
 import { useAuth } from "../hooks/useAuth";
 import { useFirestore } from "../hooks/useFirestore";
 
@@ -13,7 +12,13 @@ function Modal() {
   const params = useParams();
   const [imageDetail, setImageDetail] = useState({});
   const [loading, setLoading] = useState(true);
+  const [disableDownload, setDisableDownload] = useState(false);
+  const { user } = useAuth();
+  const {
+    historyData: { response },
+  } = useFirestore();
   let navigate = useNavigate();
+  
   useEffect(() => {
     const getImage = async () => {
       setLoading(true);
@@ -31,8 +36,10 @@ function Modal() {
     };
     getImage();
   }, [params]);
-  const { id, largeImageURL, tags } = imageDetail;
 
+  const { id, largeImageURL, tags, previewURL, imageWidth, imageHeight } =
+    imageDetail;
+  console.log(imageDetail);
   const modalRef = useRef();
   useEffect(() => {
     let closeList = (e) => {
@@ -43,38 +50,7 @@ function Modal() {
     document.addEventListener("mousedown", closeList);
     return () => document.removeEventListener("mousedown", closeList);
   });
-  const url = window.location.href;
-  const shareClickHandler = () => {
-    navigator.clipboard.writeText(url);
-    toast.success("Copied to clipBoard!", {
-      duration: 2000,
-      position: "top-right",
-    });
-  };
 
-  const { user } = useAuth();
-  const [disableDownload, setDisableDownload] = useState(false);
-  const {
-    historyData: { response },
-  } = useFirestore();
-  const handleDownload = async () => {
-    setDisableDownload(true);
-    const historyImgId = response.map((imgData) => imgData.id);
-    if (!historyImgId.includes(id)) {
-      const q = query(
-        collection(db, `userInfo`),
-        where("userId", "==", user.uid)
-      );
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach(async (doc) => {
-        await addDoc(collection(db, `userInfo/${doc.id}/history`), {
-          id,
-          largeImageURL,
-          tags,
-        });
-      });
-    }
-  };
   return (
     <div className="absolute top-0">
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none ">
@@ -168,7 +144,15 @@ function Modal() {
                     </label>
                   </div>
                   <button
-                    onClick={() => handleDownload()}
+                    onClick={() =>
+                      downloadClickHandler(
+                        previewURL,
+                        setDisableDownload,
+                        user,
+                        response,
+                        imageDetail
+                      )
+                    }
                     className="bg-[#4BC34B] w-[275px] rounded-lg text-[11px] font-semibold py-[10px] text-white my-4 disabled:cursor-not-allowed"
                     disabled={disableDownload}
                   >
