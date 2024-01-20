@@ -4,8 +4,12 @@ function ImgCard({ imgDetail }) {
   const { largeImageURL, tags } = imgDetail;
   return (
     <>
-      <div className="cursor-pointer w-[360px]">
-        <img alt="img" src={largeImageURL} className="w-[360px]" />
+      <div className="cursor-pointer w-[360px] max-sm:w-full">
+        <img
+          alt="img"
+          src={largeImageURL}
+          className="w-[360px] max-sm:w-full"
+        />
         <div className="flex gap-1 mt-[11px]">
           {tags &&
             tags.split(",").map((tag, index) => {

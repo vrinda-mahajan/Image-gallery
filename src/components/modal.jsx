@@ -39,7 +39,6 @@ function Modal() {
 
   const { id, largeImageURL, tags, previewURL, imageWidth, imageHeight,views,downloads,likes } =
     imageDetail;
-  console.log(imageDetail);
   const modalRef = useRef();
   useEffect(() => {
     let closeList = (e) => {
@@ -89,13 +88,13 @@ function Modal() {
                 </button>
               </div>
               {/*body*/}
-              <div className="relative p-6 flex">
+              <div className="relative p-6 flex max-md:flex-col">
                 <img
-                  className="min-w-[500px] rounded object-cover h-[350px] overflow-hidden "
+                  className="min-w-[500px] max-md:min-w-full rounded object-cover h-[350px] max-md:h-[200px] max-sm:h-[180px] overflow-hidden "
                   alt="tech img"
                   src={largeImageURL}
                 />
-                <div className="w-1/3 text-[#3B4043] mx-8">
+                <div className="w-1/3 max-md:w-full text-[#3B4043] mx-8 max-md:mx-1">
                   <div className="flex justify-between items-center">
                     <h2 className="text[21px] tracking-wide">Download</h2>
                     <button
@@ -106,7 +105,7 @@ function Modal() {
                       Share
                     </button>
                   </div>
-                  <div className="border-[1px] w-[275px] rounded-lg mt-3">
+                  <div className="border-[1px] w-[275px] max-md:w-full rounded-lg mt-3">
                     {downloadSizes.map((size) => (
                       <label
                         htmlFor={size.name}
@@ -130,7 +129,7 @@ function Modal() {
                         imageDetail
                       )
                     }
-                    className="bg-[#4BC34B] w-[275px] rounded-lg text-[11px] font-semibold py-[10px] text-white my-4 disabled:cursor-not-allowed"
+                    className="bg-[#4BC34B] w-[275px] max-md:w-full rounded-lg text-[11px] font-semibold py-[10px] text-white my-4 disabled:cursor-not-allowed"
                     disabled={disableDownload}
                   >
                     Download for free!
@@ -155,7 +154,7 @@ function Modal() {
                 </div>
               </div>
               {/*footer*/}
-              <div className="flex gap-1 items-center pb-6 px-6 rounded-b-lg">
+              <div className="flex flex-wrap gap-1 items-center pb-6 px-6 rounded-b-lg">
                 <span className="font-semibold text-[#3B4043]">Tags: </span>
                 {tags &&
                   tags.split(",").map((tag, index) => {

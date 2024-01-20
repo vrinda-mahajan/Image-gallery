@@ -31,7 +31,7 @@ function Signup() {
     <div className="w-full flex justify-center items-center h-screen bg-[#f6f6f6]">
       <form
         onSubmit={handleFormSubmit}
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-1/3"
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-1/3 max-md:w-4/5"
       >
         <div className="text-red-700">{error && error}</div>
         <h1 className="text-center font-semibold text-2xl">Sign Up</h1>
