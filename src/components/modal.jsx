@@ -4,6 +4,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { ColorRing } from "react-loader-spinner";
+import { db } from "../firebase/config";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { useAuth } from "../hooks/useAuth";
+import { useFirestore } from "../hooks/useFirestore";
 
 function Modal() {
   const params = useParams();
@@ -46,6 +50,30 @@ function Modal() {
       duration: 2000,
       position: "top-right",
     });
+  };
+
+  const { user } = useAuth();
+  const [disableDownload, setDisableDownload] = useState(false);
+  const {
+    historyData: { response },
+  } = useFirestore();
+  const handleDownload = async () => {
+    setDisableDownload(true);
+    const historyImgId = response.map((imgData) => imgData.id);
+    if (!historyImgId.includes(id)) {
+      const q = query(
+        collection(db, `userInfo`),
+        where("userId", "==", user.uid)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach(async (doc) => {
+        await addDoc(collection(db, `userInfo/${doc.id}/history`), {
+          id,
+          largeImageURL,
+          tags,
+        });
+      });
+    }
   };
   return (
     <div className="absolute top-0">
@@ -139,7 +167,11 @@ function Modal() {
                       </div>
                     </label>
                   </div>
-                  <button className="bg-[#4BC34B] w-[275px] rounded-lg text-[11px] font-semibold py-[10px] text-white my-4">
+                  <button
+                    onClick={() => handleDownload()}
+                    className="bg-[#4BC34B] w-[275px] rounded-lg text-[11px] font-semibold py-[10px] text-white my-4 disabled:cursor-not-allowed"
+                    disabled={disableDownload}
+                  >
                     Download for free!
                   </button>
                   <h2 className="text[21px] tracking-wide font-medium">

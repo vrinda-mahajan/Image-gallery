@@ -6,6 +6,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { useImages } from "../contexts/imageContext";
 import { useParams } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
+import { Link } from "react-router-dom";
 
 const categories = [
   "Digital",
@@ -67,11 +68,12 @@ function ImagesSection() {
                 <Masonry columnsCount={3} gutter="56px">
                   {imagesData.map((imgData) => {
                     return (
+                      <Link to={`/${category}/${imgData.id}`} >
                       <ImgCard
                         key={imgData.id}
                         imgDetail={imgData}
-                        category={category}
                       />
+                      </Link>
                     );
                   })}
                 </Masonry>

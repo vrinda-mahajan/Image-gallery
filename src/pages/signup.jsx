@@ -1,18 +1,27 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
-import { auth } from "../firebase/config";
+import { auth, db } from "../firebase/config";
 import { useNavigate } from "react-router-dom";
+import { addDoc, collection } from "firebase/firestore";
 
 function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(email,password)
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await addDoc(collection(db, "userInfo"), {
+        userId: user.uid,
+        userEmail: user.email,
+      });
       navigate("/");
     } catch (error) {
       setError(error.message);
@@ -23,8 +32,8 @@ function Signup() {
       <form
         onSubmit={handleFormSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-1/3"
-        >
-          <div className="text-red-700">{error && error}</div>
+      >
+        <div className="text-red-700">{error && error}</div>
         <h1 className="text-center font-semibold text-2xl">Sign Up</h1>
         <div className="mb-4">
           <label
