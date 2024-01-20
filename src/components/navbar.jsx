@@ -1,8 +1,8 @@
 import React from "react";
-import { useAuth } from "../contexts/authContext";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { Link } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 function Navbar() {
   const { user } = useAuth();
