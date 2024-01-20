@@ -1,13 +1,18 @@
-import React from "react";
-import { useFirestore } from "../hooks/useFirestore";
+import React, { useEffect } from "react";
 import { ColorRing } from "react-loader-spinner";
 import ImgCard from "../components/imgCard";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { useHistory } from "../hooks/useHistory";
 
 function History() {
   const {
-    historyData: { response, loading },
-  } = useFirestore();
+    state: { history },
+    loading,
+    getHistoryDocs,
+  } = useHistory();
+  useEffect(() => {
+    getHistoryDocs();
+  }, [getHistoryDocs]);
   return (
     <div className="pt-28 bg-[#d6d6d6] px-8">
       {loading ? (
@@ -25,21 +30,14 @@ function History() {
           <h1 className="text-center text-[20px] font-semibold mb-6">
             History
           </h1>
-          {response.length > 0 ? (
+          {history.length > 0 ? (
             <div>
               <ResponsiveMasonry
                 columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
               >
                 <Masonry columnsCount={3} gutter="56px">
-                  {response.map((historyImg) => (
-                    <ImgCard
-                      key={historyImg.id}
-                      imgDetail={{
-                        id: historyImg.id,
-                        largeImageURL: historyImg.imgUrl,
-                        tags: historyImg.tags,
-                      }}
-                    />
+                  {history.map((historyImg) => (
+                    <ImgCard key={historyImg.id} imgDetail={historyImg} />
                   ))}
                 </Masonry>
               </ResponsiveMasonry>

@@ -6,8 +6,8 @@ import { ColorRing } from "react-loader-spinner";
 import shareClickHandler from "../utils/shareImg";
 import downloadClickHandler from "../utils/downloadImg";
 import { useAuth } from "../hooks/useAuth";
-import { useFirestore } from "../hooks/useFirestore";
 import toast from "react-hot-toast";
+import { useHistory } from "../hooks/useHistory";
 
 function Modal() {
   const params = useParams();
@@ -16,8 +16,8 @@ function Modal() {
   const [disableDownload, setDisableDownload] = useState(false);
   const { user } = useAuth();
   const {
-    historyData: { response },
-  } = useFirestore();
+    state: { history },
+  } = useHistory();
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -141,7 +141,7 @@ function Modal() {
                           previewURL,
                           setDisableDownload,
                           user,
-                          response,
+                          history,
                           imageDetail
                         )
                       }

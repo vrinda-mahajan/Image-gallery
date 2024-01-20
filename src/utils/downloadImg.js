@@ -6,20 +6,23 @@ const downloadClickHandler = async (
   downloadImgURL,
   setDisableDownload,
   user,
-  response,
+  history,
   imageDetail
 ) => {
   const { id, largeImageURL, tags } = imageDetail;
   FileSaver.saveAs(downloadImgURL, "download.jpg");
   setDisableDownload(true);
-  const historyImgId = response.map((imgData) => imgData.id);
+  const historyImgId = history.map((imgData) => imgData.id);
+  console.log(historyImgId.includes(id))
   if (!historyImgId.includes(id)) {
     const q = query(
       collection(db, `userInfo`),
       where("userId", "==", user.uid)
     );
+    console.log("dsjfn")
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach(async (doc) => {
+      console.log(`userInfo/${doc.id}/history`)
       await addDoc(collection(db, `userInfo/${doc.id}/history`), {
         id,
         largeImageURL,

@@ -5,14 +5,17 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { ImageProvider } from "./contexts/imageContext";
 import { AuthProvider } from "./contexts/authContext";
+import { HistoryProvider } from "./contexts/historyContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <BrowserRouter>
-      <AuthProvider>
+  <BrowserRouter>
+    <AuthProvider>
+      <HistoryProvider>
         <ImageProvider>
           <App />
         </ImageProvider>
-      </AuthProvider>
-    </BrowserRouter>
+      </HistoryProvider>
+    </AuthProvider>
+  </BrowserRouter>
 );

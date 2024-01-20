@@ -1,0 +1,43 @@
+import { createContext, useReducer } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useState } from "react";
+import { db } from "../firebase/config";
+import { useAuth } from "../hooks/useAuth";
+import { appReducer, initialReducerValue } from "../reducer/appReducer";
+
+const HistoryContext = createContext();
+
+const HistoryProvider = ({ children }) => {
+  const [loading, setLoading] = useState(true);
+
+  const { user } = useAuth();
+  const [state, dispatch] = useReducer(appReducer, initialReducerValue);
+
+  const getHistoryDocs = async () => {
+    let docId;
+    const q = query(
+      collection(db, `userInfo`),
+      where("userId", "==", user.uid)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (doc) => {
+      docId = doc.id;
+    });
+    const historySnapshot = await getDocs(
+      collection(db, `userInfo/${docId}/history`)
+    );
+    let images = [];
+    historySnapshot.forEach((doc) => {
+      images.push(doc.data());
+    });
+    dispatch({ type: "SET_HISTORY", payload: images });
+    setLoading(false);
+  };
+
+  const value = { state, dispatch, loading, getHistoryDocs };
+  return (
+    <HistoryContext.Provider value={value}>{children}</HistoryContext.Provider>
+  );
+};
+
+export { HistoryContext, HistoryProvider };
