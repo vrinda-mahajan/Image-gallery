@@ -12,15 +12,19 @@ import PrivateRoutes from "./routes/privateRoutes";
 import { useEffect } from "react";
 import { useHistory } from "./hooks/useHistory";
 import { useLike } from "./hooks/useLike";
+import Liked from "./pages/liked";
+import { useAuth } from "./hooks/useAuth";
 
 function App() {
   const location = useLocation();
   const { getHistory } = useHistory();
   const { getLiked } = useLike();
+  const { user } = useAuth();
+
   useEffect(() => {
-    getHistory();
-    getLiked();
-  }, []);
+    user && getHistory();
+    user && getLiked();
+  }, [user]);
   return (
     <>
       {!["/signin", "/signup"].includes(location.pathname) && <Navbar />}
@@ -34,6 +38,15 @@ function App() {
           element={
             <PrivateRoutes>
               <History />
+            </PrivateRoutes>
+          }
+        />
+        <Route
+          exact
+          path="/liked"
+          element={
+            <PrivateRoutes>
+              <Liked />
             </PrivateRoutes>
           }
         />

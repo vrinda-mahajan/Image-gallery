@@ -116,6 +116,7 @@ function Modal() {
                     <div className="flex gap-1">
                       {liked.find((img) => img.id === id) ? (
                         <button
+                          onClick={() => toast("Already Liked!")}
                           title="like"
                           className="border-[1px] border-[#3B4043] rounded py-[2px] px-1 bg-transparent my-3"
                         >
