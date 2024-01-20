@@ -23,14 +23,12 @@ const useFirestore = () => {
       );
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach(async (doc) => {
-        console.log(doc.id, " => ", doc.data());
         docId = doc.id;
       });
       const historySnapshot = await getDocs(
         collection(db, `userInfo/${docId}/history`)
       );
       historySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data().largeImageURL}`);
         sethistoryData((prev) => ({
           ...prev,
           response: [
@@ -48,8 +46,8 @@ const useFirestore = () => {
         loading: false,
       }));
     };
-    getHistoryDocs();
-  }, [user,sethistoryData]);
+    user && getHistoryDocs();
+  }, [user, sethistoryData]);
   return { historyData };
 };
 export { useFirestore };

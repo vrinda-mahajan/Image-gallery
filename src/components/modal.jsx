@@ -7,6 +7,7 @@ import shareClickHandler from "../utils/shareImg";
 import downloadClickHandler from "../utils/downloadImg";
 import { useAuth } from "../hooks/useAuth";
 import { useFirestore } from "../hooks/useFirestore";
+import toast from "react-hot-toast";
 
 function Modal() {
   const params = useParams();
@@ -37,8 +38,17 @@ function Modal() {
     getImage();
   }, [params]);
 
-  const { id, largeImageURL, tags, previewURL, imageWidth, imageHeight,views,downloads,likes } =
-    imageDetail;
+  const {
+    id,
+    largeImageURL,
+    tags,
+    previewURL,
+    imageWidth,
+    imageHeight,
+    views,
+    downloads,
+    likes,
+  } = imageDetail;
   const modalRef = useRef();
   useEffect(() => {
     let closeList = (e) => {
@@ -114,26 +124,42 @@ function Modal() {
                         <p>{size.name}</p>
                         <div className="flex">
                           <p className="font-bold">{`${size.width} X ${size.height}`}</p>
-                          <input name="downloadSize" id={size.name} type="radio" className="ml-6" />
+                          <input
+                            name="downloadSize"
+                            id={size.name}
+                            type="radio"
+                            className="ml-6"
+                          />
                         </div>
                       </label>
                     ))}
                   </div>
-                  <button
-                    onClick={() =>
-                      downloadClickHandler(
-                        previewURL,
-                        setDisableDownload,
-                        user,
-                        response,
-                        imageDetail
-                      )
-                    }
-                    className="bg-[#4BC34B] w-[275px] max-md:w-full rounded-lg text-[11px] font-semibold py-[10px] text-white my-4 disabled:cursor-not-allowed"
-                    disabled={disableDownload}
-                  >
-                    Download for free!
-                  </button>
+                  {user ? (
+                    <button
+                      onClick={() =>
+                        downloadClickHandler(
+                          previewURL,
+                          setDisableDownload,
+                          user,
+                          response,
+                          imageDetail
+                        )
+                      }
+                      className="bg-[#4BC34B] w-[275px] max-md:w-full rounded-lg text-[11px] font-semibold py-[10px] text-white my-4 disabled:cursor-not-allowed"
+                      disabled={disableDownload}
+                    >
+                      Download for free!
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => toast.error("Login to Download!")}
+                      className="bg-[#4BC34B] w-[275px] max-md:w-full rounded-lg text-[11px] font-semibold py-[10px] text-white my-4 disabled:cursor-not-allowed"
+                      disabled={disableDownload}
+                    >
+                      Download for free!
+                    </button>
+                  )}
+
                   <h2 className="text[21px] tracking-wide font-medium">
                     Information
                   </h2>
@@ -143,7 +169,9 @@ function Modal() {
                       <p>{views}</p>
                     </div>
                     <div className="font-semibold">
-                      <span className="text-[11px] text-[#717579]">Downloads</span>
+                      <span className="text-[11px] text-[#717579]">
+                        Downloads
+                      </span>
                       <p>{downloads}</p>
                     </div>
                     <div className="font-semibold">

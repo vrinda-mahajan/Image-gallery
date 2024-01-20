@@ -22,8 +22,8 @@ function History() {
         </div>
       ) : (
         <div>
-          <h1 className="text-center text-[20px] font-semibold">
-            History Page
+          <h1 className="text-center text-[20px] font-semibold mb-6">
+            History
           </h1>
           {response.length > 0 ? (
             <div>
