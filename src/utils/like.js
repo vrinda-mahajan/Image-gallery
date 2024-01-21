@@ -3,7 +3,6 @@ import toast from "react-hot-toast";
 const likeClickHandler = async (category, addToLiked, liked, imageDetail) => {
   const { id } = imageDetail;
   const likedImgId = liked.map((imgData) => imgData.id);
-  console.log(likedImgId);
   if (!likedImgId.includes(id)) {
     addToLiked(category, imageDetail);
   } else {

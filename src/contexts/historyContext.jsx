@@ -36,20 +36,21 @@ const HistoryProvider = ({ children }) => {
 
   const addToHistory = async (category, imageDetail) => {
     const { id, largeImageURL, tags } = imageDetail;
+    const documentData = {
+      id,
+      largeImageURL,
+      tags,
+      category,
+    };
     const q = query(
       collection(db, `userInfo`),
       where("userId", "==", user.uid)
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach(async (doc) => {
-      await addDoc(collection(db, `userInfo/${doc.id}/history`), {
-        id,
-        largeImageURL,
-        tags,
-        category,
-      });
+      await addDoc(collection(db, `userInfo/${doc.id}/history`), documentData);
     });
-    getHistory();
+    dispatch({ type: "ADD_TO_HISTORY", payload: documentData });
   };
 
   const value = { state, dispatch, loading, getHistory, addToHistory };

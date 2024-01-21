@@ -33,21 +33,22 @@ const LikeProvider = ({ children }) => {
 
   const addToLiked = async (category, imageDetail) => {
     const { id, largeImageURL, tags } = imageDetail;
+    const documentData = {
+      id,
+      largeImageURL,
+      tags,
+      category,
+    };
     const q = query(
       collection(db, `userInfo`),
       where("userId", "==", user.uid)
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach(async (doc) => {
-      await addDoc(collection(db, `userInfo/${doc.id}/liked`), {
-        id,
-        largeImageURL,
-        tags,
-        category,
-      });
+      await addDoc(collection(db, `userInfo/${doc.id}/liked`), documentData);
     });
     toast.success("Liked!");
-    getLiked();
+    dispatch({ type: "ADD_TO_LIKED", payload: documentData });
   };
 
   const value = { loading, getLiked, addToLiked };
