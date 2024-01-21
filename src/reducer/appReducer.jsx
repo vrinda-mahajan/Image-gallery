@@ -13,6 +13,8 @@ const appReducer = (state, action) => {
       return { ...state, liked: action.payload };
     case "ADD_TO_LIKED":
       return { ...state, liked: [...state.liked, action.payload] };
+    case "DELETE_FROM_LIKED":
+      return { ...state, liked: action.payload };
     default:
       return state;
   }

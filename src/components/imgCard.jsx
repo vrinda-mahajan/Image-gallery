@@ -8,7 +8,7 @@ function ImgCard({ imgDetail }) {
         <img
           alt="img"
           src={largeImageURL}
-          className="w-[360px] max-sm:w-full"
+          className="w-[360px] rounded max-sm:w-full"
         />
         <div className="flex gap-1 mt-[11px]">
           {tags &&

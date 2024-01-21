@@ -42,6 +42,7 @@ const HistoryProvider = ({ children }) => {
       tags,
       category,
     };
+    dispatch({ type: "ADD_TO_HISTORY", payload: documentData });
     const q = query(
       collection(db, `userInfo`),
       where("userId", "==", user.uid)
@@ -50,7 +51,6 @@ const HistoryProvider = ({ children }) => {
     querySnapshot.forEach(async (doc) => {
       await addDoc(collection(db, `userInfo/${doc.id}/history`), documentData);
     });
-    dispatch({ type: "ADD_TO_HISTORY", payload: documentData });
   };
 
   const value = { state, dispatch, loading, getHistory, addToHistory };

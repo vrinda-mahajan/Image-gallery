@@ -1,5 +1,13 @@
 import { createContext, useState } from "react";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase/config";
 import toast from "react-hot-toast";
 import { useAuth, useHistory } from "../hooks";
@@ -9,7 +17,7 @@ const LikeProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const { user } = useAuth();
-  const { dispatch } = useHistory();
+  const { state, dispatch } = useHistory();
   const getLiked = async () => {
     let docId;
     const q = query(
@@ -39,6 +47,8 @@ const LikeProvider = ({ children }) => {
       tags,
       category,
     };
+    toast.success("Liked!");
+    dispatch({ type: "ADD_TO_LIKED", payload: documentData });
     const q = query(
       collection(db, `userInfo`),
       where("userId", "==", user.uid)
@@ -47,11 +57,32 @@ const LikeProvider = ({ children }) => {
     querySnapshot.forEach(async (doc) => {
       await addDoc(collection(db, `userInfo/${doc.id}/liked`), documentData);
     });
-    toast.success("Liked!");
-    dispatch({ type: "ADD_TO_LIKED", payload: documentData });
   };
 
-  const value = { loading, getLiked, addToLiked };
+  const deleteFromLiked = async (imgId) => {
+    const filteredData = state.liked.filter((imgData) => imgData.id !== imgId);
+    dispatch({ type: "DELETE_FROM_LIKED", payload: filteredData });
+    let userDocId;
+    const q = query(
+      collection(db, `userInfo`),
+      where("userId", "==", user.uid)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (doc) => {
+      userDocId = doc.id;
+    });
+    let likedDocId;
+    const likedQuery = query(
+      collection(db, `userInfo/${userDocId}/liked`),
+      where("id", "==", imgId)
+    );
+    const likedSnapshot = await getDocs(likedQuery);
+    likedSnapshot.forEach(async (doc) => {
+      likedDocId = doc.id;
+    });
+    await deleteDoc(doc(db, `userInfo/${userDocId}/liked`, likedDocId));
+  };
+  const value = { loading, getLiked, addToLiked, deleteFromLiked };
   return <LikeContext.Provider value={value}>{children}</LikeContext.Provider>;
 };
 

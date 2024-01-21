@@ -22,7 +22,7 @@ function Modal() {
     state: { history, liked },
     addToHistory,
   } = useHistory();
-  const { addToLiked } = useLike();
+  const { addToLiked, deleteFromLiked } = useLike();
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ function Modal() {
       }
     };
     getImage();
-  }, [params]);
+  }, []);
 
   const {
     id,
@@ -116,7 +116,7 @@ function Modal() {
                     <div className="flex gap-1">
                       {liked.find((img) => img.id === id) ? (
                         <button
-                          onClick={() => toast("Already Liked!")}
+                          onClick={() => deleteFromLiked(id)}
                           title="like"
                           className="border-[1px] border-[#3B4043] rounded py-[2px] px-1 bg-transparent my-3"
                         >

@@ -23,7 +23,7 @@ function ImagesSection() {
   const { category } = useParams();
   useEffect(() => {
     setCategory(category);
-  }, [category, setCategory]);
+  }, [category]);
   return (
     <div>
       <div className="relative h-[340px] max-sm:h-1/2 overflow-hidden">
